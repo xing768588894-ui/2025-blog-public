@@ -1,8 +1,8 @@
 {
 	"meta": {
-		"title": "YYsuni",
-		"description": "YYsuni 的个人博客，记录前端开发、探索、笔记。前端 UI 更新代码仓库。",
-		"username": "Suni"
+		"title": "测试站点标题",
+		"description": "个人博客，记录前端开发、探索、笔记。前端 UI 更新代码仓库。",
+		"username": "测试账号名称"
 	},
 	"theme": {
 		"colorBrand": "#de4331",
@@ -30,35 +30,43 @@
 		{
 			"id": "a46372ff45bc5524",
 			"url": "/images/art/a46372ff45bc5524.jpg"
+		},
+		{
+			"id": "144b7da9e2112a94",
+			"url": "/images/art/144b7da9e2112a94.png"
 		}
 	],
-	"currentArtImageId": "a46372ff45bc5524",
+	"currentArtImageId": "144b7da9e2112a94",
 	"backgroundImages": [
 		{
 			"id": "",
 			"url": ""
+		},
+		{
+			"id": "f2ad4d3af18e1e40",
+			"url": "/images/background/f2ad4d3af18e1e40.png"
 		}
 	],
-	"currentBackgroundImageId": "",
+	"currentBackgroundImageId": "f2ad4d3af18e1e40",
 	"socialButtons": [
 		{
 			"id": "github",
 			"type": "github",
-			"value": "https://github.com/yysuni",
+			"value": "https://github.com/xing768588894-ui/2025-blog-public",
 			"label": "Github",
 			"order": 3
 		},
 		{
 			"id": "juejin",
 			"type": "juejin",
-			"value": "https://juejin.cn/user/2427311675422382",
-			"label": "稀土掘金",
+			"value": "https://2025-blog-public.xing768588894.workers.dev/",
+			"label": "xinglinlin",
 			"order": 2
 		},
 		{
 			"id": "email",
 			"type": "email",
-			"value": "yysuni1001@gmail.com",
+			"value": "xing768588894@gmail.com",
 			"label": "",
 			"order": 1
 		}
@@ -68,9 +76,9 @@
 	"isCachePem": false,
 	"hideEditButton": false,
 	"enableCategories": true,
-	"currentHatIndex": 3,
+	"currentHatIndex": 4,
 	"hatFlipped": false,
-	"enableChristmas": false,
+	"enableChristmas": true,
 	"beian": {
 		"text": "",
 		"link": ""
