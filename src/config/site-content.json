@@ -7,7 +7,7 @@
 	"theme": {
 		"colorBrand": "#de4331",
 		"colorPrimary": "#4E3F42",
-		"colorSecondary": "#7b888e",
+		"colorSecondary": "#141516",
 		"colorBrandSecondary": "#FCC841",
 		"colorBg": "#eeeeee",
 		"colorBorder": "#ffffff",
@@ -15,7 +15,7 @@
 		"colorArticle": "#ffffffcc"
 	},
 	"backgroundColors": [
-		"#FCC841",
+		"#fcc841",
 		"#DFEFFC",
 		"#DEDE92",
 		"#DE4331",
