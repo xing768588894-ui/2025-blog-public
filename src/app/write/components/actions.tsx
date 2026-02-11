@@ -5,9 +5,10 @@ import { useRouter } from 'next/navigation'
 import { useWriteStore } from '../stores/write-store'
 import { usePreviewStore } from '../stores/preview-store'
 import { usePublish } from '../hooks/use-publish'
+import { parsePdf, parseWord, parseJson } from '@/lib/document-parser'
 
 export function WriteActions() {
-	const { loading, mode, form, loadBlogForEdit, originalSlug, updateForm } = useWriteStore()
+	const { loading, mode, form, originalSlug, updateForm, addFiles } = useWriteStore()
 	const { openPreview } = usePreviewStore()
 	const { isAuth, onChoosePrivateKey, onPublish, onDelete } = usePublish()
 	const [saving, setSaving] = useState(false)
@@ -51,15 +52,51 @@ export function WriteActions() {
 		mdInputRef.current?.click()
 	}
 
-	const handleMdFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
-		const file = e.target.files?.[0]
-		if (!file) return
+	const handleFileImport = async (e: React.ChangeEvent<HTMLInputElement>) => {
+		const files = e.target.files
+		if (!files || files.length === 0) return
 
 		try {
-			const text = await file.text()
-			updateForm({ md: text })
-			toast.success('已导入 Markdown 文件')
-		} catch (error) {
+			let newText = ''
+			const fileArray = Array.from(files)
+
+			const imageFiles = fileArray.filter(f => f.type.startsWith('image/'))
+			if (imageFiles.length > 0) {
+				const items = await addFiles(imageFiles)
+				items.forEach(item => {
+					if (item.type === 'file') {
+						newText += `\n![${item.filename}](${item.previewUrl})\n`
+					} else {
+						newText += `\n![](${item.url})\n`
+					}
+				})
+			}
+
+			for (const file of fileArray) {
+				if (file.type.startsWith('image/')) continue
+
+				let content = ''
+				if (file.type === 'application/pdf') {
+					content = await parsePdf(file)
+				} else if (file.name.toLowerCase().endsWith('.doc')) {
+					toast.info('暂不支持 .doc（老格式），请另存为 .docx 再导入')
+					continue
+				} else if (file.name.toLowerCase().endsWith('.docx') || file.type.includes('word')) {
+					content = await parseWord(file)
+				} else if (file.type === 'application/json' || file.name.toLowerCase().endsWith('.json')) {
+					content = await parseJson(file)
+				} else {
+					content = await file.text()
+				}
+				newText += '\n' + content + '\n'
+			}
+
+			if (newText) {
+				updateForm({ md: (form.md || '') + newText })
+				toast.success('导入成功')
+			}
+		} catch (err) {
+			console.error(err)
 			toast.error('导入失败，请重试')
 		} finally {
 			if (e.currentTarget) e.currentTarget.value = ''
@@ -79,7 +116,14 @@ export function WriteActions() {
 					if (e.currentTarget) e.currentTarget.value = ''
 				}}
 			/>
-			<input ref={mdInputRef} type='file' accept='.md' className='hidden' onChange={handleMdFileChange} />
+			<input
+				ref={mdInputRef}
+				type='file'
+				accept='.md,.txt,.json,.pdf,.docx,.doc,.png,.jpg,.jpeg,.webp,.gif'
+				multiple
+				className='hidden'
+				onChange={handleFileImport}
+			/>
 
 			<ul className='absolute top-4 right-6 flex items-center gap-2'>
 				{mode === 'edit' && (
@@ -118,7 +162,7 @@ export function WriteActions() {
 					className='bg-card rounded-xl border px-4 py-2 text-sm'
 					disabled={loading}
 					onClick={handleImportMd}>
-					导入 MD
+					导入文件（PDF/Word/TXT）
 				</motion.button>
 				<motion.button
 					initial={{ opacity: 0, scale: 0.6 }}
